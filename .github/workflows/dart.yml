@@ -34,6 +34,7 @@ jobs:
         
       - name: Debug
         run: |
+          pwd
           ls -ls dart_analyze.txt
           cat dart_analyze.txt
 
