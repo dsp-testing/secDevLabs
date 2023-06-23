@@ -45,6 +45,7 @@ jobs:
           pwd
           ls -ls *dart_analyze.txt
           cat ${{ steps.appname.outputs.APP_NAME }}_dart_analyze.txt
+          echo "${{vars.GITHUB_WORKSPACE}}/${{matrix.dir}}"
 
       - name: Dart Analyze to SARIF
         uses: felickz/dart-analyzer-sarif@sarif-level-info
