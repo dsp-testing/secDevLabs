@@ -41,12 +41,12 @@ jobs:
       - name: Dart Analyze to SARIF
         uses: advanced-security/dart-analyzer-sarif@main
         with:
-          input: dart_analyze.txt
-          output: dart_analyze.sarif
+          input: "${{matrix.dir}}/dart_analyze.txt"
+          output: "${{matrix.dir}}/dart_analyze.sarif"
       
       - name: Upload SARIF
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: dart_analyze.sarif
+          sarif_file: "${{matrix.dir}}/dart_analyze.sarif"
           # Need unique category since we will be uploading multiple code scanning results in one go
           category: "/app:${{matrix.dir}}"
