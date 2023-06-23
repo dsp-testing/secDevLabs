@@ -44,13 +44,17 @@ jobs:
           input: "${{matrix.dir}}/dart_analyze.txt"
           output: "${{matrix.dir}}/dart_analyze.sarif"
       
+      - name: Name the artifact without "/" 's 
+        run: |
+          echo "ARTIFACT_NAME=$(echo ${{matrix.dir}} | rev | cut -d "/" -f 2 | rev)" >> $GITHUB_OUTPUT
+        id: artifactname
+      
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           # Artifact name
-          name: "${{matrix.dir}}"        
+          name: ${{ steps.artifactname.outputs.ARTIFACT_NAME }}     
           path: "dart_analyze.sarif"
-
       
       - name: Upload SARIF
         uses: github/codeql-action/upload-sarif@v2
