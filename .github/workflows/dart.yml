@@ -1,29 +1,24 @@
-name: Flutter for Android
+name: Dart Analyze Code Scanning
 
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-  
-defaults:
-  run:    
-    working-directory: owasp-top10-2016-mobile/m5/panda_zap/mobile
 
-jobs:  
-  build:
-    runs-on: ubuntu-latest    
+jobs:
+  scan:
+    strategy:
+      fail-fast: false
+      matrix:
+        dir: [ 'owasp-top10-2016-mobile/m2/cool_games/mobile', 'owasp-top10-2016-mobile/m4/note-box/mobile', 'owasp-top10-2016-mobile/m5/panda_zap/mobile' ]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.dir }}
 
     steps:
       - uses: actions/checkout@v2
-
-    # - name: Set up JDK
-    #   uses: actions/setup-java@v1
-    #   with:
-    #     java-version: 11
-
-    # - name: Setup Android SDK
-    #   uses: android-actions/setup-android@v2
 
       - name: Setup Flutter SDK
         uses: flutter-actions/setup-flutter@v2
@@ -34,11 +29,18 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Analyze project source
-        run: dart analyze
-        
-      - name: Analyze project source
-        run: flutter analyze
+      - name: Dart Analyze
+        run: dart analyze > dart_analyze.txt || true
 
-      #- name: Run tests
-      #  run: flutter test
+      - name: Dart Analyze to SARIF
+        uses: advanced-security/dart-analyzer-sarif@main
+        with:
+          input: dart_analyze.txt
+          output: dart_analyze.sarif
+      
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: dart_analyze.sarif
+          # Need unique category since we will be uploading multiple code scanning results in one go
+          category: "/app:${{matrix.dir}}"
