@@ -26,9 +26,11 @@ jobs:
           channel: stable
           version: 3.0.2
       
-     # Dart Analyze should do this...
-     #- name: Install dependencies
-     #  run: flutter pub get
+        # Dart Analyze should do this...
+      - name: Install dependencies
+        run: |
+          cd ${{matrix.dir}}
+          flutter pub get
         
       - name: Name the artifact without "/" 's 
         run: |
