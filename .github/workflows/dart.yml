@@ -67,4 +67,5 @@ jobs:
           sarif_file: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.sarif"
           # Need unique category since we will be uploading multiple code scanning results in one go
           category: "/app:${{ steps.appname.outputs.APP_NAME }}"
+          checkout_path: "${{vars.GITHUB_WORKSPACE}}"
 
