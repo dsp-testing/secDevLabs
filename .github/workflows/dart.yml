@@ -13,9 +13,9 @@ jobs:
       matrix:
         dir: [ 'owasp-top10-2016-mobile/m2/cool_games/mobile', 'owasp-top10-2016-mobile/m4/note-box/mobile', 'owasp-top10-2016-mobile/m5/panda_zap/mobile' ]
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ matrix.dir }}
+    #defaults:
+    #  run:
+    #    working-directory: ${{ matrix.dir }}
 
     steps:
       - uses: actions/checkout@v2
@@ -28,38 +28,40 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+        
+      - name: Name the artifact without "/" 's 
+        run: |
+          echo "APP_NAME=$(echo ${{matrix.dir}} | rev | cut -d "/" -f 2 | rev)" >> $GITHUB_OUTPUT
+        id: appname        
 
       - name: Dart Analyze
-        run: dart analyze > dart_analyze.txt || true
+        run: dart analyze ${{ matrix.dir }} > ${{ steps.appname.outputs.APP_NAME }}_dart_analyze.txt || true
         
       - name: Debug
         run: |
           pwd
-          ls -ls dart_analyze.txt
-          cat dart_analyze.txt
+          ls -ls *dart_analyze.txt
+          cat ${{ steps.appname.outputs.APP_NAME }}_dart_analyze.txt
 
       - name: Dart Analyze to SARIF
         uses: felickz/dart-analyzer-sarif@sarif-level-info
         with:
-          input: "${{matrix.dir}}/dart_analyze.txt"
-          output: "${{matrix.dir}}/dart_analyze.sarif"
+          input: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.txt"
+          output: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.sarif"
       
-      - name: Name the artifact without "/" 's 
-        run: |
-          echo "APP_NAME=$(echo ${{matrix.dir}} | rev | cut -d "/" -f 2 | rev)" >> $GITHUB_OUTPUT
-        id: appname
+
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           # Artifact name
           name: ${{ steps.appname.outputs.APP_NAME }}
-          path: "${{matrix.dir}}/dart_analyze.sarif"
+          path: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.sarif"
       
       - name: Upload SARIF
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: "${{matrix.dir}}/dart_analyze.sarif"
+          sarif_file: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.sarif"
           # Need unique category since we will be uploading multiple code scanning results in one go
           category: "/app:${{ steps.appname.outputs.APP_NAME }}"
-          checkout_path: "${{vars.GITHUB_WORKSPACE}}/${{ matrix.dir }}"
+
