@@ -48,13 +48,20 @@ jobs:
           echo "${GITHUB_WORKSPACE}/${{matrix.dir}}"
 
       - name: Dart Analyze to SARIF
-        #uses: advanced-security/dart-analyzer-sarif@main
-        uses: felickz/dart-analyzer-sarif@sarif-level-info
+        uses: advanced-security/dart-analyzer-sarif@main        
         with:
           input: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.txt"
           output: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.sarif"
           sourceroot: "${GITHUB_WORKSPACE}/${{matrix.dir}}"
-            
+
+      # This tools allows users to update broken SARIF files that have relative paths that aren't based on the root GitHub Repository folder.
+      - uses: advanced-security/sarif-toolkit/relativepaths@main
+        with:
+          # SARIF File / Directory location
+          sarif: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.sarif"
+          # Working Directory (sub folder of the working directory)
+          working: "${{matrix.dir}}"
+
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
