@@ -49,12 +49,12 @@ jobs:
         with:
           # Artifact name
           name: "${{matrix.dir}}"        
-          path: "${{matrix.dir}}/dart_analyze.sarif"
+          path: "dart_analyze.sarif"
 
       
       - name: Upload SARIF
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: "${{matrix.dir}}/dart_analyze.sarif"
+          sarif_file: "dart_analyze.sarif"
           # Need unique category since we will be uploading multiple code scanning results in one go
           category: "/app:${{matrix.dir}}"
