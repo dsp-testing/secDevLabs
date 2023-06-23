@@ -39,7 +39,7 @@ jobs:
           cat dart_analyze.txt
 
       - name: Dart Analyze to SARIF
-        uses: advanced-security/dart-analyzer-sarif@main
+        uses: felickz/dart-analyzer-sarif@sarif-level-info
         with:
           input: "${{matrix.dir}}/dart_analyze.txt"
           output: "${{matrix.dir}}/dart_analyze.sarif"
