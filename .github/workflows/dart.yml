@@ -46,19 +46,19 @@ jobs:
       
       - name: Name the artifact without "/" 's 
         run: |
-          echo "ARTIFACT_NAME=$(echo ${{matrix.dir}} | rev | cut -d "/" -f 2 | rev)" >> $GITHUB_OUTPUT
-        id: artifactname
+          echo "APP_NAME=$(echo ${{matrix.dir}} | rev | cut -d "/" -f 2 | rev)" >> $GITHUB_OUTPUT
+        id: appname
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           # Artifact name
-          name: ${{ steps.artifactname.outputs.ARTIFACT_NAME }}     
+          name: ${{ steps.appname.outputs.APP_NAME }}
           path: "${{matrix.dir}}/dart_analyze.sarif"
       
       - name: Upload SARIF
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: "dart_analyze.sarif"
+          sarif_file: "${{matrix.dir}}/dart_analyze.sarif"
           # Need unique category since we will be uploading multiple code scanning results in one go
-          category: "/app:${{matrix.dir}}"
+          category: "/app:${{ steps.appname.outputs.APP_NAME }}"
