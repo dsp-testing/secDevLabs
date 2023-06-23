@@ -52,7 +52,7 @@ jobs:
         with:
           input: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.txt"
           output: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.sarif"
-          sourceroot: "${GITHUB_WORKSPACE}/${{matrix.dir}}"
+          #sourceroot: "${GITHUB_WORKSPACE}/${{matrix.dir}}"
 
       # This tools allows users to update broken SARIF files that have relative paths that aren't based on the root GitHub Repository folder.
       - uses: advanced-security/sarif-toolkit/relativepaths@main
