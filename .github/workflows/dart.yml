@@ -54,7 +54,7 @@ jobs:
         with:
           # Artifact name
           name: ${{ steps.artifactname.outputs.ARTIFACT_NAME }}     
-          path: "dart_analyze.sarif"
+          path: "${{matrix.dir}}/dart_analyze.sarif"
       
       - name: Upload SARIF
         uses: github/codeql-action/upload-sarif@v2
