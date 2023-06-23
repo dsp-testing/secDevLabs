@@ -45,7 +45,7 @@ jobs:
           pwd
           ls -ls *dart_analyze.txt
           cat ${{ steps.appname.outputs.APP_NAME }}_dart_analyze.txt
-          echo "$GITHUB_WORKSPACE/${{matrix.dir}}"
+          echo "${GITHUB_WORKSPACE}/${{matrix.dir}}"
 
       - name: Dart Analyze to SARIF
         #uses: advanced-security/dart-analyzer-sarif@main
@@ -68,5 +68,5 @@ jobs:
           sarif_file: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.sarif"
           # Need unique category since we will be uploading multiple code scanning results in one go
           category: "/app:${{ steps.appname.outputs.APP_NAME }}"
-          #checkout_path: "$GITHUB_WORKSPACE"
+          #checkout_path: "${GITHUB_WORKSPACE}"
 
