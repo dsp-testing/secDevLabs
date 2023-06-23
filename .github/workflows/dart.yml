@@ -31,6 +31,11 @@ jobs:
 
       - name: Dart Analyze
         run: dart analyze > dart_analyze.txt || true
+        
+      - name: Debug
+        run: |
+          ls -ls dart_analyze.txt
+          cat dart_analyze.txt
 
       - name: Dart Analyze to SARIF
         uses: advanced-security/dart-analyzer-sarif@main
