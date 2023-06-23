@@ -51,7 +51,7 @@ jobs:
         with:
           input: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.txt"
           output: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.sarif"
-          source_root: "${{$GITHUB_WORKSPACE}}/${{matrix.dir}}"
+          source_root: "${{vars.GITHUB_WORKSPACE}}/${{matrix.dir}}"
             
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
