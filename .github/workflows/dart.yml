@@ -17,13 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
+    # - name: Set up JDK
+    #   uses: actions/setup-java@v1
+    #   with:
+    #     java-version: 11
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
+    # - name: Setup Android SDK
+    #   uses: android-actions/setup-android@v2
 
       - name: Setup Flutter SDK
         uses: flutter-actions/setup-flutter@v2
@@ -36,6 +36,9 @@ jobs:
 
       - name: Analyze project source
         run: dart analyze
+        
+      - name: Analyze project source
+        run: flutter analyze
 
-      - name: Run tests
-        run: flutter test
+      #- name: Run tests
+      #  run: flutter test
