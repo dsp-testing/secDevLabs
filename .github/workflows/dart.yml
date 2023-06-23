@@ -38,7 +38,7 @@ jobs:
         id: appname        
 
       - name: Dart Analyze
-        run: dart analyze  > ${{ steps.appname.outputs.APP_NAME }}_dart_analyze.txt || true
+        run: dart analyze ${{matrix.dir}} > ${{ steps.appname.outputs.APP_NAME }}_dart_analyze.txt || true
         
       - name: Debug
         run: |
@@ -51,9 +51,8 @@ jobs:
         with:
           input: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.txt"
           output: "${{ steps.appname.outputs.APP_NAME }}_dart_analyze.sarif"
-      
-
-      
+          source_root: "${{$GITHUB_WORKSPACE}}/${{matrix.dir}}"
+            
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
